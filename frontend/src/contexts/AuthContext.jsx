@@ -32,9 +32,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (token, userData) => {
+    console.log('AuthContext login called with:', { token, userData });
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
+    console.log('After setting localStorage - token:', localStorage.getItem('token'));
+    console.log('After setting localStorage - user:', localStorage.getItem('user'));
     setUser(userData);
+    console.log('User state updated to:', userData);
   };
 
   const logout = () => {

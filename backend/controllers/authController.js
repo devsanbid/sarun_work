@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId }, process.env.JWT_SECRET || "sanbid", {
     expiresIn: process.env.JWT_EXPIRE || '7d'
   });
 };
@@ -70,15 +70,19 @@ const login = async (req, res) => {
     await user.save();
     
     const token = generateToken(user._id);
+    console.log('Generated token for user:', user.email, 'Token:', token);
     
     const userResponse = user.getPublicProfile();
     
-    res.json({
+    const responseData = {
       success: true,
       message: 'Login successful',
       token,
       user: userResponse
-    });
+    };
+    
+    console.log('Sending login response:', responseData);
+    res.json(responseData);
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error during login' });

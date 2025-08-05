@@ -28,7 +28,9 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    console.log('API Error intercepted:', error.response?.status, error.config?.url);
     if (error.response?.status === 401) {
+      console.log('401 error detected, clearing localStorage');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';

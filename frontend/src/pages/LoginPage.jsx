@@ -41,14 +41,29 @@ const LoginPage = ({ onClose }) => {
       if (response.data.success) {
         console.log('Login response:', response.data);
         console.log('User role:', response.data.user.role);
+        console.log('Token received:', response.data.token);
+        
+        // Test localStorage functionality
+        console.log('Testing localStorage...');
+        localStorage.setItem('test', 'working');
+        console.log('Test value:', localStorage.getItem('test'));
+        localStorage.removeItem('test');
         
         login(response.data.token, response.data.user);
+        
+        console.log('Token stored in localStorage:', localStorage.getItem('token'));
+        console.log('User stored in localStorage:', localStorage.getItem('user'));
+        
+        // Check if token exists immediately after setting
+        const immediateToken = localStorage.getItem('token');
+        console.log('Immediate token check:', immediateToken);
         
         if (onClose) onClose();
         
         setTimeout(() => {
           const redirectPath = location.state?.from?.pathname || getDefaultPath(response.data.user.role);
           console.log('Redirect path:', redirectPath);
+          console.log('Token still in localStorage before redirect:', localStorage.getItem('token'));
           navigate(redirectPath, { replace: true });
         }, 100);
       } else {
